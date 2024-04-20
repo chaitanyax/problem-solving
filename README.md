@@ -158,3 +158,44 @@ function getCode(char) {
     return char.charCodeAt(0) - 'a'.charCodeAt(0);
 }
 ```
+
+## 347. Top K Frequent Elements
+
+> Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+
+> Example 1:
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+
+> Example 2:
+Input: nums = [1], k = 1
+Output: [1]
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function(nums, k) {
+    let map = {};
+    let bucketList = [];
+    for(let i = 0; i < nums.length; i++) {
+        if(map.hasOwnProperty(nums[i])) {
+            map[nums[i]]++;
+        } else {
+            map[nums[i]] = 1;
+        }
+    }
+    for(let key in map) {
+        bucketList.push([map[key], key]);
+    }
+    bucketList.sort((a, b) => b[0] - a[0]);
+    let temp = [];
+    for(let l = 0; l < k; l++) {
+        temp.push(bucketList[l][1]);
+    }
+
+    return temp;
+};
+```
