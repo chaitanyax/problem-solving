@@ -124,3 +124,48 @@ tokens[i] is either an operator: "+", "-", "*", or "/", or an integer in the ran
         return stack[0];
     };
 ```
+
+## 22. Generate Parentheses
+
+> Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+> Example 1:
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+
+> Example 2:
+Input: n = 1
+Output: ["()"]
+ 
+> Constraints:
+1 <= n <= 8
+
+```js
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+    stack = [];
+    result = [];
+    
+    function backTrack(open, close) {
+        if(open === n && close === n) {
+            result.push(stack.join(''));
+            return;
+        }
+        if(open < n) {
+            stack.push('(');
+            backTrack(open + 1, close);
+            stack.pop();
+        }
+        if(open > close) {
+            stack.push(')');
+            backTrack(open, close + 1);
+            stack.pop();
+        }
+    }
+    backTrack(0, 0);
+    return result;
+};
+```
