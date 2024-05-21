@@ -154,3 +154,5 @@ Output: false
 
 > Constraints:
 1 <= s1.length, s2.length <= 1000
+```js
+```
