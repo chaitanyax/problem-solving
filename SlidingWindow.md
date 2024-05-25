@@ -156,3 +156,88 @@ Output: false
 1 <= s1.length, s2.length <= 1000
 ```js
 ```
+
+## 76. Minimum Window Substring
+> Given two strings s and t of lengths m and n respectively, return the minimum window 
+substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+> The testcases will be generated such that the answer is unique.
+
+> Example 1:
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+> Example 2:
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+
+> Example 3:
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+ 
+> Constraints:
+m == s.length
+n == t.length
+1 <= m, n <= 105
+s and t consist of uppercase and lowercase English letters.
+Follow up: Could you find an algorithm that runs in O(m + n) time?
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    if(t == '') {
+        return '';
+    }
+    let result = [-1, -1];
+    let len = Infinity;
+    let need = 0;
+    let have = 0;
+    let left = 0;
+    let right = 0;
+    let needMap = {};
+    let haveMap = {};
+
+    // Prepare Need Window and Have Window init with zeros
+    for(let i = 0; i < t.length; i++) {
+        if(needMap.hasOwnProperty(t[i])) {
+            needMap[t[i]] += 1;
+        } else {
+            needMap[t[i]] = 1;
+        }
+        haveMap[t[i]] = 0;
+    }
+    need = Object.keys(needMap).length;
+    for(right = 0; right < s.length; right++) {
+        let c = s[right];
+        if(haveMap.hasOwnProperty(c)) {
+            haveMap[c] += 1;
+            if(haveMap[c] == needMap[c]) {
+                have += 1;
+            }
+        }
+        while(have == need) {
+            let substrlen = (right - left) + 1;
+            if(len > substrlen) {
+                result = [left, right];
+                len = substrlen; 
+            }
+            let k = s[left];
+            if(haveMap.hasOwnProperty(k)) {
+                haveMap[k] -= 1;
+                if(needMap[k] > haveMap[k]) {
+                    have -= 1;
+                }
+            }
+            left += 1;
+        }
+    }
+    return s.substring(result[0], result[1] + 1);
+};
+```
